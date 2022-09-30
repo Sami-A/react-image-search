@@ -1,17 +1,17 @@
 import { useState } from "react";
-
-import Dialog from "../../armor/Dialog";
-
 import styled from "@emotion/styled";
+
+import numberFormat from "@/helpers/numberFormatter";
+
 import { Images } from "../types";
 
-import Download from "../../svg/Download";
-import Comment from "../../svg/Comment";
-import Like from "../../svg/Like";
-import numberFormat from "../../helpers/numberFormatter";
+import OptimizedImage from "@/armor/OptimizedImage";
+import Dialog from "@/armor/Dialog";
+import Tags from "@/armor/Tags";
 
-import { LazyLoadImage } from "react-lazy-load-image-component";
-import "react-lazy-load-image-component/src/effects/blur.css";
+import Download from "@/svg/Download";
+import Comment from "@/svg/Comment";
+import Like from "@/svg/Like";
 
 const Image = ({ data }: { data: Images }) => {
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -26,14 +26,10 @@ const Image = ({ data }: { data: Images }) => {
   return (
     <>
       <ImageContainer>
-        <LazyLoadImage
+        <OptimizedImage
           onClick={openDialog}
           src={data.largeImageURL}
           placeholderSrc={data.previewURL}
-          alt="photo"
-          height={"100%"}
-          width={"100%"}
-          effect="blur"
         />
       </ImageContainer>
       <Dialog
@@ -42,15 +38,12 @@ const Image = ({ data }: { data: Images }) => {
         title="Photo"
       >
         <ImageDetail>
-          <LazyLoadImage
+          <OptimizedImage
             onClick={openDialog}
             src={data.largeImageURL}
             placeholderSrc={data.previewURL}
-            alt="photo"
-            height={"100%"}
-            width={"100%"}
-            effect="blur"
           />
+          <Tags tags={data.tags} />
           <div className="image-footer">
             <div className="image-footer-items">
               <Download /> <span>{numberFormat(data.downloads)}</span>

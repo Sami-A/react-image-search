@@ -45,7 +45,7 @@ const Dialog = ({ isDialogOpen, closeDialog, title, children }: Props): any => {
         <div className="dialog">
           <div className="content">
             <div className="content-header">
-              <h6>{title}</h6>
+              <h4>{title}</h4>
 
               <Close size={16} onPress={close} />
             </div>

@@ -1,43 +1,47 @@
+import { useCallback, useEffect, useState } from "react";
 import styled from "@emotion/styled";
-import {
-  KeyboardEvent,
-  MutableRefObject,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from "react";
 
 type Props = {
   isLoading: boolean;
+  isError: boolean;
   searchImage: (searchKey: string) => void;
 };
 
 let searchKey: string;
 
-const SearchBar = ({ isLoading, searchImage }: Props) => {
-  const searchInput = useRef() as MutableRefObject<HTMLInputElement>;
+const SearchBar = ({ isLoading, isError, searchImage }: Props) => {
+  const [searchInput, setSearchInput] = useState<string>("cat");
 
-  useEffect(() => {
-    const keyDownHandler = (event: any) => {
+  const keyDownHandler = useCallback(
+    (event: KeyboardEvent) => {
       if (event.key === "Enter") {
         event.preventDefault();
         search();
       }
-    };
+    },
+    [searchInput]
+  );
+
+  useEffect(() => {
     document.addEventListener("keydown", keyDownHandler);
 
     return () => {
       document.removeEventListener("keydown", keyDownHandler);
     };
-  }, []);
+  }, [keyDownHandler]);
 
   function search() {
-    if (!searchKey) searchKey === searchInput.current?.value;
+    if (!searchKey) searchKey === searchInput;
 
-    if (searchKey === searchInput.current?.value) return;
+    /**
+     * - If search key is the same,
+     *   this will help prevent unnecessary request going to the server.
+     * - However, is there was an error occurred the user can
+     *   try as many times as they desired.
+     **/
+    if (searchKey === searchInput && !isError) return;
 
-    searchKey = searchInput.current?.value;
+    searchKey = searchInput;
     if (searchKey) searchImage(searchKey);
   }
 
@@ -45,8 +49,16 @@ const SearchBar = ({ isLoading, searchImage }: Props) => {
     <SearchBarContainer>
       <h2 className="search-header">Search Image</h2>
       <div className="search-form">
-        <input ref={searchInput} name="query" />
-        <button disabled={isLoading} onClick={search} className="Search-Bar-Submit">
+        <input
+          name="query"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <button
+          disabled={isLoading || !searchInput}
+          onClick={search}
+          className="Search-Bar-Submit"
+        >
           Search
         </button>
       </div>
@@ -72,6 +84,9 @@ const SearchBarContainer = styled.div`
       border: 0.1rem solid #ccc;
       border-radius: 0.2rem;
       padding: 0 0.5rem;
+    }
+    & > input:focus {
+      outline: 0.12rem solid #000;
     }
 
     & > button {

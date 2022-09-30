@@ -1,17 +1,27 @@
 import styled from "@emotion/styled";
+
+import useSearch from "@/helpers/useSearch";
+
 import SearchBar from "./components/SearchBar";
-import Spinner from "../armor/Spinner";
 import Image from "./components/Image";
 
-import useSearch from "../helpers/useSearch";
+import ErrorBox from "@/armor/ErrorBox";
+import Spinner from "@/armor/Spinner";
 
-import { Images } from "./types";
+import { Images, ImageSearchResponse } from "./types";
 
 const ImageSearch = () => {
-  const { search, isLoading, data: images } = useSearch();
+  const {
+    search,
+    isLoading,
+    data: images,
+    isError,
+    error,
+  } = useSearch<ImageSearchResponse>();
 
   function searchImage(searchKey: string) {
-    search(searchKey);
+    const searchUrl = `per_page=24&image_type=photo&q=${searchKey}`;
+    search(searchUrl);
   }
 
   function getStyle() {
@@ -24,13 +34,22 @@ const ImageSearch = () => {
 
   return (
     <ImageSearchContainer style={getStyle()}>
-      <SearchBar isLoading={isLoading} searchImage={searchImage} />
+      <SearchBar
+        isLoading={isLoading}
+        isError={isError}
+        searchImage={searchImage}
+      />
+      {isError && <ErrorBox message={error} />}
       {isLoading && <Spinner />}
       <ImagesContainer>
-        {images?.hits &&
-          images?.hits.map((item: Images) => (
-            <Image key={item.id} data={item} />
-          ))}
+        {images?.hits && images?.hits.length > 0
+          ? images?.hits.map((item: Images) => (
+              <Image key={item.id} data={item} />
+            ))
+          : images?.hits instanceof Array &&
+            images?.hits.length < 1 &&
+            !isLoading &&
+            !isError && <h5>Did not match any image.</h5>}
       </ImagesContainer>
     </ImageSearchContainer>
   );

@@ -22,3 +22,9 @@ export interface Images {
   user: string;
   userImageURL: string;
 }
+
+export interface ImageSearchResponse {
+  hits: Images[];
+  total: number;
+  totalHits: number;
+}
