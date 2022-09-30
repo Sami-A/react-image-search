@@ -10,7 +10,7 @@ type Props = {
 let searchKey: string;
 
 const SearchBar = ({ isLoading, isError, searchImage }: Props) => {
-  const [searchInput, setSearchInput] = useState<string>("cat");
+  const [searchInput, setSearchInput] = useState<string>("");
 
   const keyDownHandler = useCallback(
     (event: KeyboardEvent) => {
