@@ -36,7 +36,7 @@ const SearchBar: FC<Props> = ({ isLoading, isError, searchImage }) => {
     /**
      * - If search key is the same,
      *   this will help prevent unnecessary request going to the server.
-     * - However, is there was an error occurred the user can
+     * - However, if there was an error occurred, the user can
      *   try as many times as they desired.
      **/
     if (searchKey === searchInput && !isError) return;
