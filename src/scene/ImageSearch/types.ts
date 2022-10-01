@@ -1,4 +1,4 @@
-export interface Images {
+export interface ImageContent {
   id: number;
   pageURL: string;
   type: string;
@@ -24,7 +24,7 @@ export interface Images {
 }
 
 export interface ImageSearchResponse {
-  hits: Images[];
+  hits: ImageContent[];
   total: number;
   totalHits: number;
 }

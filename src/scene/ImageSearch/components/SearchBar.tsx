@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, FC } from "react";
 import styled from "@emotion/styled";
 
 type Props = {
@@ -9,7 +9,7 @@ type Props = {
 
 let searchKey: string;
 
-const SearchBar = ({ isLoading, isError, searchImage }: Props) => {
+const SearchBar: FC<Props> = ({ isLoading, isError, searchImage }) => {
   const [searchInput, setSearchInput] = useState<string>("");
 
   const keyDownHandler = useCallback(
@@ -54,11 +54,7 @@ const SearchBar = ({ isLoading, isError, searchImage }: Props) => {
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
         />
-        <button
-          disabled={isLoading || !searchInput}
-          onClick={search}
-          className="Search-Bar-Submit"
-        >
+        <button disabled={isLoading || !searchInput} onClick={search}>
           Search
         </button>
       </div>

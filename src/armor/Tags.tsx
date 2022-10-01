@@ -1,6 +1,7 @@
+import { FC } from "react";
 import styled from "@emotion/styled";
 
-const Tags = ({ tags = "" }: { tags: string }) => {
+const Tags: FC<{ tags: string }> = ({ tags = "" }) => {
   const data = tags.split(",");
   return (
     <TagsContainer>
@@ -12,7 +13,7 @@ const Tags = ({ tags = "" }: { tags: string }) => {
 };
 
 const TagsContainer = styled.div`
-  padding-top: 0.5rem;
+  padding-top: 0.9rem;
   display: flex;
   gap: 0.5rem;
   span {

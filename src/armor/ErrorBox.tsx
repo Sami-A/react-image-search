@@ -1,10 +1,9 @@
+import { FC } from "react";
 import styled from "@emotion/styled";
 
-const ErrorBox = ({
-  message = "Unknown error has occurred",
-}: {
+const ErrorBox: FC<{
   message?: string;
-}) => (
+}> = ({ message = "Unknown error has occurred" }) => (
   <ErrorContainer>
     <span>{message}</span>
   </ErrorContainer>

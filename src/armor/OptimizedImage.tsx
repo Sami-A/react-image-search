@@ -1,13 +1,14 @@
-import styled from "@emotion/styled";
+import { FC } from "react";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import styled from "@emotion/styled";
 
 type Props = {
-  onClick: () => void;
+  onClick?: () => void;
   src: string;
   placeholderSrc?: string;
 };
 
-const OptimizedImage = ({ onClick, src, placeholderSrc = "" }: Props) => (
+const OptimizedImage: FC<Props> = ({ onClick, src, placeholderSrc }) => (
   <ImageContainer>
     <LazyLoadImage
       onClick={onClick}
@@ -25,8 +26,9 @@ const ImageContainer = styled.div`
   height: inherit;
   margin: 0;
   padding: 0;
+
   .lazy-load-image-background.blur {
-    filter: blur(15px);
+    filter: blur(0.9px);
   }
 
   .lazy-load-image-background.blur.lazy-load-image-loaded {

@@ -9,23 +9,22 @@ const useSearch = <T>() => {
   const [isError, setIsError] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
-  const fetchData = useCallback(async (url: string) => {
+  const fetchData = useCallback(async (query: string) => {
     setIsLoading(true);
     setIsError(false);
-    setError("");
     try {
-      const data = await get<T>(url);
+      const data = await get<T>(query);
       setData(data);
       setIsLoading(false);
-    } catch (e: unknown) {
+    } catch (e) {
       setIsLoading(false);
       setIsError(true);
       setError(String(e));
     }
   }, []);
 
-  const search = (url: string) => {
-    fetchData(url);
+  const search = (query: string) => {
+    fetchData(query);
   };
 
   return { search, isLoading, data, isError, error };

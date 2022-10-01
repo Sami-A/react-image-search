@@ -19,19 +19,10 @@ const GlobalStyle = () => {
         }
 
         html {
-          height: 100%;
-        }
-
-        body {
           height: 100vh;
         }
 
         button {
-          cursor: pointer;
-        }
-
-        a {
-          text-decoration: none;
           cursor: pointer;
         }
 

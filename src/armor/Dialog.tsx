@@ -1,8 +1,8 @@
-import { useRef, MouseEvent, ReactNode } from "react";
+import { useRef, MouseEvent, ReactNode, FC } from "react";
 
-import useDelayUnmount from "../helpers/useDelayUnmount";
+import useDelayUnmount from "@/helpers/useDelayUnmount";
 
-import Close from "../svg/Close";
+import Close from "@/svg/Close";
 
 import animate, { ANIMATION_TYPES, ANIMATION_STYLES } from "../helpers/animate";
 import styled from "@emotion/styled";
@@ -14,9 +14,18 @@ type Props = {
   children: ReactNode;
 };
 
-const Dialog = ({ isDialogOpen, closeDialog, title, children }: Props): any => {
+const Dialog: FC<Props> = ({
+  isDialogOpen,
+  closeDialog,
+  title,
+  children,
+}): any => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
+  /**
+   * This will delay the component unmount
+   * to show closing animation
+   **/
   const delayTimeWhenUnmount = !isDialogOpen ? 200 : 0;
   const showComponent = useDelayUnmount(isDialogOpen, delayTimeWhenUnmount);
 
@@ -75,7 +84,7 @@ const DialogContainer = styled.div`
 
   .dialog {
     overflow-x: hidden;
-    width: 400px;
+    width: 25rem;
 
     background-color: #fff;
 
@@ -106,7 +115,7 @@ const DialogContainer = styled.div`
   }
   .content-body {
     padding-top: 1.3rem;
-    padding-bottom: 2rem;
+    padding-bottom: 1.3rem;
   }
 `;
 

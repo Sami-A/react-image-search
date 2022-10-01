@@ -1,16 +1,19 @@
+import { FC, useCallback, useState } from "react";
 import styled from "@emotion/styled";
+
+import { ImageContent, ImageSearchResponse } from "./types";
 
 import useSearch from "@/helpers/useSearch";
 
 import SearchBar from "./components/SearchBar";
 import Image from "./components/Image";
+import ImageDetail from "./components/ImageDetail";
 
 import ErrorBox from "@/armor/ErrorBox";
 import Spinner from "@/armor/Spinner";
+import Dialog from "@/armor/Dialog";
 
-import { Images, ImageSearchResponse } from "./types";
-
-const ImageSearch = () => {
+const ImageSearch: FC = () => {
   const {
     search,
     isLoading,
@@ -19,18 +22,31 @@ const ImageSearch = () => {
     error,
   } = useSearch<ImageSearchResponse>();
 
+  const [selectedImage, setSelectedImage] = useState<ImageContent>(
+    {} as ImageContent
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+
+  const openDialog = (imageData: ImageContent) => {
+    setSelectedImage(imageData);
+    setIsDialogOpen(true);
+  };
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
   function searchImage(searchKey: string) {
-    const searchUrl = `per_page=24&image_type=photo&q=${searchKey}`;
-    search(searchUrl);
+    const query = `per_page=24&image_type=photo&q=${searchKey}`;
+    search(query);
   }
 
-  function getStyle() {
+  const getStyle = useCallback(() => {
     if (images?.hits && images?.hits.length > 0) return {};
     return {
       height: "100vh",
       justifyContent: "center",
     };
-  }
+  }, [images?.hits.length]);
 
   return (
     <ImageSearchContainer style={getStyle()}>
@@ -41,16 +57,30 @@ const ImageSearch = () => {
       />
       {isError && <ErrorBox message={error} />}
       {isLoading && <Spinner />}
+      {/**
+       * - We are showing the image list container even though
+       * it might be loading or has error.
+       * - It's better if we show them the previous result until
+       *   ongoing process are over rather than displaying an empty space.
+       */}
       <ImagesContainer>
-        {images?.hits && images?.hits.length > 0
-          ? images?.hits.map((item: Images) => (
-              <Image key={item.id} data={item} />
+        {images?.hits instanceof Array && images?.hits.length > 0
+          ? images.hits.map((item: ImageContent) => (
+              <Image key={item.id} data={item} onClick={openDialog} />
             ))
-          : images?.hits instanceof Array &&
+          : images?.hits &&
             images?.hits.length < 1 &&
             !isLoading &&
             !isError && <h5>Did not match any image.</h5>}
       </ImagesContainer>
+      <Dialog
+        isDialogOpen={isDialogOpen}
+        closeDialog={closeDialog}
+        title="Photo"
+      >
+        {/* In the future use context to access selectedImage */}
+        <ImageDetail selectedImage={selectedImage} />
+      </Dialog>
     </ImageSearchContainer>
   );
 };
