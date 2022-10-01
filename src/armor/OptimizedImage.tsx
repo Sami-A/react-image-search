@@ -28,7 +28,7 @@ const ImageContainer = styled.div`
   padding: 0;
 
   .lazy-load-image-background.blur {
-    filter: blur(0.9px);
+    filter: blur(0.9rem);
   }
 
   .lazy-load-image-background.blur.lazy-load-image-loaded {
